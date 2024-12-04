@@ -3,6 +3,7 @@ from models.schemas.productionSchema import production_schema, productions_schem
 from services import productionService
 from marshmallow import ValidationError
 from caching import cache
+from services.productionService import evaluate_production_efficiency
 
 
 def save():
@@ -21,3 +22,9 @@ def save():
 def find_all():
     productions = productionService.find_all()
     return productions_schema.jsonify(productions), 200
+
+#Task 2: Part 4
+
+def evaluate_production_efficiency():
+    efficiency_data = productionService.evaluate_production_efficiency()
+    return jsonify(efficiency_data), 200

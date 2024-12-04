@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.production import Production
+from models.product import Product
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 def fallback_function(production):
     return None
@@ -27,3 +28,21 @@ def find_all():
     query = select([Production])
     productions = db.session.execute(query).scalars().all()
     return productions
+
+#Task 2: Part 4
+
+def evaluate_production_efficiency(specific_date):
+    subquery = (
+        db.session.query(Production.product_id)
+        .filter(Production.date == specific_date)
+        .subquery()
+    )
+
+    results = (
+        db.session.query(Product.name, func.sum(Production.quantity))
+        .join(Production, Product.id == Production.product_id)
+        .filter(Production.product_id.in_(subquery))
+        .group_by(Product.name)
+        .all()
+    )
+    return results

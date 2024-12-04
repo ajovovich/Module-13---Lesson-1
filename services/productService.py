@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.product import Product
+from models.order import Order
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 def fallback_function(product):
     return None
@@ -27,3 +28,21 @@ def find_all():
     query = select([Product])
     products = db.session.execute(query).scalars().all()
     return products
+
+#Task 2:
+
+def find_all_pagination(page=1, per_page=10):
+    products = db.paginate(select(Product), page=page, per_page=per_page)
+    return products
+
+#Task 2: Part 2
+
+def identify_top_selling_products():
+    results = (
+        db.session.query(Product.name, func.sum(Order.quantity))
+        .join(Order, Product.id == Order.product_id)
+        .group_by(Product.name)
+        .order_by(func.sum(Order.quantity).desc())
+        .all()
+    )
+    return results

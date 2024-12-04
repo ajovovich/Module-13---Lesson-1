@@ -3,6 +3,7 @@ from models.schemas.productSchema import product_schema, products_schema
 from services import productService
 from marshmallow import ValidationError
 from caching import cache
+from services.productService import identify_top_selling_products
 
 
 def save():
@@ -21,3 +22,16 @@ def save():
 def find_all():
     products = productService.find_all()
     return products_schema.jsonify(products), 200
+
+#Task 2:
+
+def find_all_pagination():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    return products_schema.jsonify(productService.find_all_pagination(page, per_page)), 200
+
+#Task 2: Part 2
+
+def identify_top_selling_products():
+    top_selling_products = productService.identify_top_selling_products()
+    return jsonify(top_selling_products), 200

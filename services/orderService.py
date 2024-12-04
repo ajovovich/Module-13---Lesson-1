@@ -27,3 +27,9 @@ def find_all():
     query = select([Order])
     orders = db.session.execute(query).scalars().all()
     return orders
+
+#Task 1:
+
+def find_all_pagination(page=1, per_page=10):
+    orders = db.paginate(select(Order), page=page, per_page=per_page)
+    return orders

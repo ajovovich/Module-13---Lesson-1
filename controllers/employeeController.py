@@ -3,6 +3,7 @@ from models.schemas.employeeSchema import employee_schema, employees_schema
 from services import employeeService
 from marshmallow import ValidationError
 from caching import cache
+from services.employeeService import analyze_employee_performance
 
 
 def save():
@@ -21,3 +22,9 @@ def save():
 def find_all():
     employees = employeeService.find_all()
     return employees_schema.jsonify(employees), 200
+
+#Task 1: Part 2
+
+def get_employee_performance():
+    performance_data = analyze_employee_performance()
+    return jsonify(performance_data), 200

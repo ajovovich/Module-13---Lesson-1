@@ -1,10 +1,12 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.employee import Employee
+from models.production import Production
+from models.product import Product
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
 
-def fallback_function(employyee):
+def fallback_function(employee):
     return None
 
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
@@ -27,3 +29,12 @@ def find_all():
     query = select([Employee])
     employees = db.session.execute(query).scalars().all()
     return employees
+
+def analyze_employee_performance():
+    results = (
+        db.session.query(Employee.name, func.sum(Production.quantity))
+        .join(Production, Employee.id == Production.employee_id)
+        .group_by(Employee.name)
+        .all()
+    )
+    return results

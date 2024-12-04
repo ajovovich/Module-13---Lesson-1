@@ -3,7 +3,7 @@ from models.schemas.customerSchema import customer_schema, customers_schema
 from services import customerService
 from marshmallow import ValidationError
 from caching import cache
-
+from services.customerService import determine_customer_lifetime_value
 
 def save():
     try:
@@ -21,3 +21,11 @@ def save():
 def find_all():
     customers = customerService.find_all()
     return customers_schema.jsonify(customers), 200
+
+#Task 3: Part 2
+
+def determine_customer_lifetime_value():
+    threshold = request.args.get('threshold', 1000, type=int)
+    customer_lifetime_value = customerService.determine_customer_lifetime_value(threshold)
+    return jsonify(customer_lifetime_value), 200
+
