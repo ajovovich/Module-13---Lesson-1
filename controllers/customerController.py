@@ -4,7 +4,11 @@ from services import customerService
 from marshmallow import ValidationError
 from caching import cache
 from services.customerService import determine_customer_lifetime_value
+from auth import token_required, role_required
 
+
+@token_required
+@role_required('admin')
 def save():
     try:
         customer_data = customer_schema.load(request.json)
@@ -16,13 +20,11 @@ def save():
         return jsonify(customer_schema.dump(customer_save)), 201
     else:
         return jsonify({"message":"Fallback method error activated","body":customer_data}), 400
-    
-@cache.cached(timeout=60)
+
 def find_all():
     customers = customerService.find_all()
     return customers_schema.jsonify(customers), 200
 
-#Task 3: Part 2
 
 def determine_customer_lifetime_value():
     threshold = request.args.get('threshold', 1000, type=int)

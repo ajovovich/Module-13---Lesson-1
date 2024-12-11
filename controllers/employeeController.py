@@ -4,8 +4,9 @@ from services import employeeService
 from marshmallow import ValidationError
 from caching import cache
 from services.employeeService import analyze_employee_performance
+from auth import token_required, role_required
 
-
+@role_required('admin')
 def save():
     try:
         employee_data = employee_schema.load(request.json)

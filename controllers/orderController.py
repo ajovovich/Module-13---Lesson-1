@@ -3,8 +3,9 @@ from models.schemas.orderSchema import order_schema, orders_schema
 from services import orderService
 from marshmallow import ValidationError
 from caching import cache
+from auth import token_required, role_required
 
-
+@role_required('admin')
 def save():
     try:
         order_data = order_schema.load(request.json)

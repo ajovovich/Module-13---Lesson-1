@@ -4,8 +4,9 @@ from services import productionService
 from marshmallow import ValidationError
 from caching import cache
 from services.productionService import evaluate_production_efficiency
+from auth import token_required, role_required
 
-
+@role_required('admin')
 def save():
     try:
         production_data = production_schema.load(request.json)
