@@ -25,10 +25,11 @@ def save(product_data):
         raise e
 
 def find_all():
-    query = select([Product])
-    products = db.session.execute(query).scalars().all()
-    return products
-
+    with Session(engine) as session:
+        query = select(Product).order_by(Product.id)  # Select all columns from the Product model
+        result = session.execute(query)
+        products = result.scalars().all()
+        return products
 #Task 2:
 
 def find_all_pagination(page=1, per_page=10):

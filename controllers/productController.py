@@ -4,8 +4,9 @@ from services import productService
 from marshmallow import ValidationError
 from caching import cache
 from services.productService import identify_top_selling_products
+from auth import token_required, role_required
 
-
+@role_required('admin')
 def save():
     try:
         product_data = product_schema.load(request.json)

@@ -12,7 +12,7 @@ def fallback_function(employee):
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(employee_data):
     try:
-        if employee_data['namer'] == "failure":
+        if employee_data['name'] == "failure":
             raise Exception("Failure condition triggered")
         with Session(db.engine) as session:
             with session.begin():
@@ -26,7 +26,7 @@ def save(employee_data):
         raise e
 
 def find_all():
-    query = select([Employee])
+    query = select(Employee)
     employees = db.session.execute(query).scalars().all()
     return employees
 
