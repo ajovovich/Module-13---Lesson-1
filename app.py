@@ -18,6 +18,18 @@ from routes.orderBP import orders_blueprint
 from routes.productBP import products_blueprint
 from routes.productionBP import productions_blueprint
 from routes.customerAccountBP import customer_account_blueprint
+from flask_swagger_ui import get_swaggerui_blueprint
+
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.yaml'
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Factory Management API"
+    }
+)
 
 
 def create_app(testing=False, config_name='DevelopmentConfig'):
@@ -56,6 +68,7 @@ def blue_print_config(app):
     app.register_blueprint(orders_blueprint, url_prefix='/orders')
     app.register_blueprint(productions_blueprint, url_prefix='/productions')
     app.register_blueprint(customer_account_blueprint, url_prefix='/accounts')
+    app.register_blueprint(swaggerui_blueprintm, url_prefix=SWAGGER_URL)
 
 
 def configure_rate_limter():

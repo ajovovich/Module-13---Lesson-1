@@ -1,0 +1,489 @@
+swagger: '2.0'
+info:
+  title: "Factory Management API"
+  description: "API for managing factories and their products"
+  version: "1.0.0"
+host: "localhost:5000"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths: 
+  /customers/:
+    get:
+      tags:
+        - Customer
+      summary: List all customers
+      responses:
+        200:
+          description: A list of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+            examples:
+              application/json:
+                value:
+                  status: "error"
+                  message: "token is missing | token has expired | invalid token"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "User does not have the required role"
+    post:
+      tags:
+        - Customer
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        201:
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        400:
+          description: Invalid input data
+
+  /employees/:
+    post:
+      tags:
+        - Employee
+      summary: Create a new employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        201:
+          description: Employee created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        400: 
+          description: Invalid input data
+    get:
+      tags:
+        - Employee
+      summary: List all employees
+      responses:
+        200:
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+            examples:
+              application/json:
+                value:
+                  status: "error"
+                  message: "token is missing | token has expired | invalid token"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "User does not have the required role"
+  /product/: 
+    get:
+      tags:
+        - Product
+      summary: List all products
+      responses:
+        200:
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+            examples:
+              application/json:
+                value:
+                  status: "error"
+                  message: "token is missing | token has expired | invalid token"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "User does not have the required role"
+    post:
+      tags:
+        - Product
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        201:
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        400:
+          description: Invalid input data
+
+  /orders/:
+    get:
+      tags:
+        - Order
+      summary: List all orders
+      responses:
+        200:
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+            examples:
+              application/json:
+                value:
+                  status: "error"
+                  message: "token is missing | token has expired | invalid token"
+    post:
+      tags:
+        - Order
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        201:
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        400:
+          description: Invalid input data
+
+  /production/:
+    get:
+      tags:
+        - Production
+      summary: List all production
+      responses:
+        200:
+          description: A list of production
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Production'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+            examples:
+              application/json:
+                value:
+                  status: "error"
+                  message: "token is missing | token has expired | invalid token"
+        403:
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "User does not have the required role"
+    post:
+      tags:
+        - Production
+      summary: Create a new production
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductionInput'
+      responses:
+        201:
+          description: Production created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Production'
+        400:
+          description: Invalid input data
+
+definitions:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The unique identifier of the customer.
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the customer.
+        email:
+          type: string
+          maxLength: 100
+          description: The email address of the customer.
+        phone:
+          type: string
+          maxLength: 20
+          description: The phone number of the customer.
+      example:
+        id: 1
+        name: John Doe
+        email: john.doe@example.com
+        phone: +1-555-555-5555
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the customer.
+          required: true
+        email:
+          type: string
+          maxLength: 100
+          description: The email address of the customer.
+          required: true
+        phone:
+          type: string
+          maxLength: 20
+          description: The phone number of the customer.
+          required: true
+      example:
+        name: Jane Smith
+        email: jane.smith@example.com
+        phone: +1-555-555-5556
+    
+    Employee:
+      type: object 
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The unique identifier of the employee.
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the employee.
+        role:
+          type: string
+          description: The role of the employee.
+      example:
+        id: 1
+        name: John Doe
+        role: Manager    
+    EmployeeInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the employee.
+          required: true
+        role:
+          type: string
+          description: The role of the employee.
+          required: true
+      example:
+        name: Jane Smith
+        role: Worker
+    
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The unique identifier of the product.
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the product.
+        price:
+          type: float
+          description: The price of the product.
+      example:
+        id: 1
+        name: Product 1
+        price: 15.99  
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: The name of the product.
+          required: true
+        price:
+          type: float
+          description: The price of the product.
+          required: true
+      example:
+        name: Product 2
+        price: 20.99
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The unique identifier of the order.
+        customer_id:
+          type: integer
+          description: The unique identifier of the customer who placed the order.
+        total_price:
+          type: float
+          description: The total price of the order.
+        product_id:
+          type: integer
+          description: The unique identifier of the product in the order.
+        quantity:
+          type: integer
+          description: The quantity of the product in the order.
+        status:
+          type: string
+          description: The status of the order.
+      example:
+        id: 1
+        customer_id: 1
+        total_price: 15.99
+        product_id: 1
+        quantity: 10
+        status: "pending"  
+    OrderInput:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          description: The unique identifier of the customer who placed the order.
+          required: true
+        total_price:
+          type: float
+          description: The total price of the order.
+          required: true
+        product_id:
+          type: integer
+          description: The unique identifier of the product in the order.
+          required: true
+        quantity:
+          type: integer
+          description: The quantity of the product in the order.
+          required: true
+        status:
+          type: string
+          description: The status of the order.
+          required: true
+      example:
+        customer_id: 1
+        total_price: 15.99
+        product_id: 1
+        quantity: 10
+        status: "pending"
+
+    Production:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The unique identifier of the production.
+        product_id:
+          type: integer
+          description: The unique identifier of the product being produced.
+        quantity:
+          type: integer
+          description: The quantity of the product being produced.
+        date_produced:
+          type: string
+          format: date
+          description: The date the production was completed.
+        status:
+          type: string
+          description: The status of the production.
+      example:
+        id: 1
+        product_id: 1
+        quantity: 100
+        date_produced: "2021-01-01"
+        status: "in progress"
+    ProductionInput:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          description: The unique identifier of the product being produced.
+          required: true
+        quantity:
+          type: integer
+          description: The quantity of the product being produced.
+          required: true
+        date_produced:
+          type: string
+          format: date
+          description: The date the production was completed.
+          required: true
+        status:
+          type: string
+          description: The status of the production.
+          required: true
+      example:
+        product_id: 1
+        quantity: 100
+        date_produced: "2021-01-01"
+        status: "in progress"
